@@ -1,0 +1,146 @@
+# Copyright (c) 2017 by Andrew M Tanner
+#
+# Endless Sky is free software: you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# Endless Sky is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+
+#Hi-Urth! is a plugin containing several missions/jobs connecting Hai and Human space
+#BETA TESTING MODE - basically, missions will always fire and have no flair, yet. Making sure the string works/
+#I intend to add some challenge by having lower-probability, higher payment missions where marauders spawn
+#May also, if there is interest, expand the mission string to deal with Unfettered/Marauder raids)
+
+mission "Hi-Urth Intro 1"
+	description "Take a Hi-Urth executive to Hai Home for a meeting with the Hai government."
+	landing	
+	source
+		attributes deep paradise 
+	destination Hai-home
+	clearance
+	passengers 1
+	to offer
+		has "First Contact: Hai: offered"
+		random < 100
+	blocked "You don't have a spare bunk available"
+	on offer
+		conversation
+			`As you land, your comm system beeps to indicate an incoming message on an encrypted channel. You access the message and answer a series of increasingly intrusive questions about your self, ship, and history. Just as you are about to write the thing off as a scam, a notification pops up, informing you that you have passed the security screen, and instructs you to wait one hour for a Hi-Urth executive to arrive and offer you a mission.`
+			choice
+				`	(Wait an hour.)`
+				`	(I don't want to do this right now.)`
+					defer
+			`	An hour passes, and you step outside your ship to greet whomever you are supposed to meet. Before you can finish closing the hatch behind you, a woman wearing a brightly colored, oddly patterned business suit approaches and greets you.`
+			`	"Hello, I take it you are <first> <last>?" You barely have time to nod before she walks past you, and into your ship. You have no choice but to follow her inside. She talks as quickly as she walks. "Let's save the pleasantries for the flight. My name is Chimamanda Ngozi, and I need you to get me to Hai-Home as quickly as possible. Our company is prepared to pay you 150,000 credits to get me there as quickly as you can manage."`
+			choice
+				`	"What is your business with the Hai? I didn't know many people on this side of the wormhole even knew they existed."`
+					goto query
+				`	"Okay, I can do that."`
+					accept
+			label query	
+			`	"I am an executive with Hi-Urth. We have a contract with the Hai government to identify and transport suitable emigrants from Human to Hai space. Before you ask: no, you haven't heard of us. Part of our contract specifies that we are liable for the actions of any miscreants who make it into Hai territory on one of our transports, so we work hard to thoroughly vet everyone we send through Waypoint. I can tell you more on the flight, but I would prefer that we get going immediately. Too many delays in space travel, and there is a lot to get done before I can go home to Luna."`
+				accept
+	on complete
+		payment 150000
+		"reputation: Hai" += 10
+		conversation
+			`	During the time you spend jumping through the empty systems on the way to Hai space, Chimamanda briefs you on Hi-Urth's activities in Hai space. It appears that several decades ago, the Hai decided to deal with the problem of what was then random pulses of immigration by sponsoring a group of entrepreneurs who were familiar with Hai culture to form a company in human space dedicated to identifying and recruiting "interesting, educated, and friendly!" humans who would be transported en masse, along with any possessions, to live permanently among the Hai. They reasoned that purposefully constructing an integrated Hai-Human society on several minor worlds would make it easier to integrate future migrants into Hai culture.`
+			`	You aren't certain you like the idea of more-or-less engineering a society, but you end up agreeing with Chimamanda that if nothing else, the Hi-Urth initiative has been very effective at staying under the radar. despite, she claims "more than sixty percent of emigrants to Hai space having done so on ships chartered by Hi-Urth."`
+		dialog
+			`You safely reach Hai-Home and drop off Chimamanda, who is greeted at the spaceport by half a dozen important looking Hai. They whisk her away without paying any attention to you, but you check your accounts and verify that <payment> was deposited.`
+
+
+
+mission "Hi-Urth Intro 2"
+	description "Take Hi-Urth executive Chimamanda Ngozi from Hai space to Luna."
+	landing	
+	source 
+		attributes "hai"
+	destination Luna
+	clearance
+	passengers 1
+	to offer
+		has "Hi-Urth Intro 1: done"
+	blocked "You don't have a spare bunk available"
+	on offer
+		conversation
+			`	When you land, you receive a message from Chimamanda Ngozi, the Hi-Urth Executive you recently transported to Hai-home. It seems her meetings are done and she is ready for the trip to Luna, back in Human space.`
+			choice
+				`	(Meet with Chimamanda.)`
+					goto chat
+				`	(I have other things to do right now.)`
+					defer
+			label chat
+			`	She greets you outside your ship. "<first> <last>, good to see you again. Are you ready to take me to Luna? In addition to the promised payment, as a result of my successful meetings with the Hai officials, and I will be able to give you access to several quite lucrative missions not available to the general public."`
+			choice
+				`	"Sure, head on in and I'll get you home."`
+					accept
+				`	"Glad things went well, can you tell me what you were discussing?"
+					goto details
+			label details
+			`	She smiles. "Well, I can say that we will be seeing an increase in the number of ships we send to Allhome each year. Which will mean that, if you have enough bunk space available, we can contract you to transport emigrants and their belongings from their homes in the deep or on the paradise worlds to Hai territory. Naturally, because of the discretion our charter captains must demonstrate in order to take these jobs, the payments will be quite competitive."`
+			`	You escort Chimamanda to her bunk, and head to the bridge to prepare for the flight to Luna`
+				accept
+	on complete
+		payment 200000
+		dialog
+			`You deliver Chimamanda safely to Luna. She thanks you, and departs. You check your accounts to find that in addition to your promised 150,000 credits you have been granted a 50,000 credit bonus for a smooth transit.`
+
+
+
+mission "Hi-Urth minor transport"
+	name "Hi-Urth small transport"
+	job
+	repeat
+	description "Hi-Urth is pleased to offer you a contract to carry <bunks> colonists to their new home on <destination>, and will pay you <payment> upon their safe arrival"
+	passengers 5 2 .1
+	to offer
+		random < 100
+		"passenger space" > 1
+		has "Hi-Urth Intro 2: done"
+	source
+		attributes deep paradise rich
+	destination
+		attributes hai
+	on complete
+		payment 150000
+		dialog "You bid farewell to the families that accompanied you on the long trip to Hai space, and a Hi-Urth liaison hands you a credit chip containing your payment while deftly dealing with a stream of questions about immigration procedures."
+
+mission "Hi-Urth major transport"
+	name "Hi-Urth large transport"
+	job
+	repeat
+	description "Hi-Urth is pleased to offer you a contract to carry <bunks> colonists to their new home on <destination>, and will pay you <payment> upon their safe arrival"
+	passengers 15 6 .1
+	to offer
+		random < 100
+		"passenger space" > 1
+		has "Hi-Urth Intro 2: done"
+	source
+		attributes deep paradise urban rich
+	destination
+		attributes hai
+	on complete
+		payment 300000
+		dialog "You bid farewell to the families that accompanied you on the long trip to Hai space, and a Hi-Urth liaison hands you a credit chip containing your payment while deftly dealing with a stream of questions about immigration procedures."
+ 
+mission "Hi-Urth cargo"
+	name "Hi-Urth Cargo Shipment"
+	job
+	repeat
+	description "Hi-Urth seeks a captain willing to make an immediate delivery of <cargo> of family possessions to <destination> and will offer <payment> in compensation."
+	cargo "Family Possessions" 20 10 .2
+	to offer
+		random < 100
+		"cargo space" >10
+		has "Hi-Urth Intro 2: done"
+	source
+		attributes deep paradise urban rich
+	destination
+		attributes hai
+	on complete
+		payment 200000
+		dialog "Several families are waiting with a group of Hai and Human dockworkers, who rapidly and efficiently unload the cargo shipment. The dockyard foreman hands you a credit chip, and you return to your ship amidst the bustle of families claiming their belongings."
