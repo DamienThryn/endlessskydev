@@ -1,0 +1,174 @@
+#issue 505 on Github
+#tehhowch provided the script, damienthryn provided the spin
+#working under the premise that Merchants and some governments will put bounties on the heads of the piracy-inclined
+
+
+#The Navy frowns on mounting independent anti-pirate operations, but doesn't take action to stop them, either
+mission "Angry Republic Merchants"
+	landing
+	invisible
+	repeat
+	source
+		government Republic
+	to offer
+		"reputation: Merchant" < -100
+		random < 5
+	to complete
+		"reputation: Merchant" > 1
+	npc save
+		personality heroic nemesis entering
+		government "Merchant"
+		fleet "Marauder fleet I"
+	on fail
+		"reputation: Merchant" -= 100
+
+
+#Free Worlds both dislikes pirates and funds independent anti-pirate ops
+mission "Angry Free Worlds Merchants"
+	landing
+	invisible
+	repeat
+	source
+		government Free Worlds
+	to offer
+		"reputation: Merchant" < -100
+		random < 5
+	to complete
+		"reputation: Merchant" > 1
+	npc save
+		personality heroic nemesis entering
+		government "Merchant"
+		fleet "Marauder fleet VI"
+	on fail
+		"reputation: Merchant" -= 100
+
+
+#Syndicate naturally is happy to contract out anti-pirate work to the private sector
+mission "Angry Syndicate Merchants"
+	landing
+	invisible
+	repeat
+	source
+		government Syndicate
+	to offer
+		"reputation: Merchant" < -100
+		random < 5
+	to complete
+		"reputation: Merchant" > 1
+	npc save
+		personality heroic nemesis entering
+		government "Merchant"
+		fleet "Marauder fleet VIII"
+	on fail
+		"reputation: Merchant" -= 100
+
+#Neutrals will scrape together some resources to punish Pirates
+mission "Neutrals Don't Tolerate Pirates"
+	landing
+	invisible
+	repeat
+	source
+		government Neutral
+	to offer
+		"reputation: Merchant" < -100
+		random < 5
+	to complete
+		"reputation: Merchant" > 1
+	npc save
+		personality heroic nemesis entering
+		government "Merchant"
+		fleet "Marauder fleet II"
+	on fail
+		"reputation: Merchant" -= 100
+
+
+#Next level of sanctions. Using basic fleet at moment, but could create more variations and tiers
+#Premise - get famous enough as a pirate, get targeted by a bigger bounty hunting fleet.
+mission "Merchants Furious in General"
+	landing
+	invisible
+	repeat
+	source
+		government Republic Syndicate Free Worlds
+	to offer
+		"reputation: Merchant" < -500
+		random < 2
+	to complete
+		"reputation: Merchant" > 1
+	npc save
+		personality heroic nemesis entering
+		government "Merchant"
+		fleet "Marauder fleet X"
+	on fail
+		"reputation: Merchant" -= 200
+
+
+#Hai don't mess around when they hear about human pirates wandering through the wormhole
+mission "The Hai Hate Piracy"
+	landing
+	invisible
+	repeat
+	source
+		government Hai
+	to offer
+		"reputation: Merchant" < -100
+		random < 10
+	to complete
+		"reputation: Merchant" > 1
+	npc save
+		personality heroic nemesis entering
+		government "Merchant"
+		fleet "Large Hai"
+	npc save
+		personality heroic nemesis entering
+		government "Merchant"
+		fleet "Large Hai"
+	on fail
+		"reputation: Merchant" -= 100
+
+
+#cut/paste from tehowch, just added a complete option if reputation v.Pug improves
+mission "Pug Angry at Being Farmed"
+	landing
+	invisible
+	to offer
+		or
+			has "Pug Cease Hostilities: offered"
+			not "chosen sides"
+		"reputation: Pug" < -100
+	npc kill
+		government Pug
+		personality nemesis heroic staying
+		system "Pug Iyik"
+		ship "Pug Arfecta" "Ayee Eee Eek"
+	to complete
+		"reputation: Pug" > -100
+
+
+#Farm the Korath Exiles too much, and they target you with one of their raids if they detect you on planets near their space...
+mission "Hunted by the Korath"
+	landing
+	invisible
+	repeat
+	source
+		planet "Shangri-la" "Sundive" "Canyon" "Stormhold" "Dead Man's Cove"
+	to offer
+		"reputation: Korath" < -500
+		random < 10
+	npc evade
+		government Korath
+		personality nemesis heroic entering
+		system 
+		fleet "Korath Raid"
+	npc evade
+		government Korath
+		personality nemesis heroic entering
+		system 
+		fleet "Korath Raid"
+	npc evade
+		government Korath
+		personality nemesis heroic entering
+		system 
+		fleet "Korath Raid"
+	to complete
+		"reputation: Korath" > -100
